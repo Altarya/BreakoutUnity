@@ -9,13 +9,26 @@ public class gameController : MonoBehaviour
 {
 
     public GameObject statusText;
-
+    public GameObject ballObj;
     TMP_Text statusTextMesh;
+    public static int lives = 3;
+    public static int score = 0;
+    public static int bricksAlive = 20;
+    public static GameState CurrentGameState = GameState.start;
+    public static ball ball;
+    private GameObject[] blocks;
+    public enum GameState
+    {
+        start,
+        playing,
+        victory,
+        lostAllLives
+    }
 
     //Init
     void Start() {
         blocks = GameObject.FindGameObjectsWithTag("brick");
-        ball = GameObject.Find("ball").GetComponent<ball>();
+        ball = ballObj.GetComponent<ball>();
         GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
         statusTextMesh = statusText.GetComponent<TMP_Text>();
 
@@ -24,51 +37,44 @@ public class gameController : MonoBehaviour
             walls[i].GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 0.1f);
         }
     }
-    private bool InputTaken() {
-
-        return UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0;
-    }
-
 
     // Update is called once per frame
     void Update()
     {
         switch (CurrentGameState)
         {
-            case GameState.Start:
-                if (InputTaken())
+            case GameState.start:
+                if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
-                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
-                    CurrentGameState = GameState.Playing;
-                    ball.Startball();
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
+                    CurrentGameState = GameState.playing;
+                    ball.startBall();
                 }
                 break;
-            case GameState.Playing:
+            case GameState.playing:
+                statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
+                if(bricksAlive == 0) {
+                    CurrentGameState = GameState.victory;
+                }
                 break;
-            case GameState.Won:
-                if (InputTaken())
+            case GameState.victory:
+                ball.stopBall();
+                statusTextMesh.text = string.Format("LEVEL CLEARED. Tap to advance");
+                if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
                     Restart();
-                    ball.Startball();
-                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
-                    CurrentGameState = GameState.Playing;
+                    ball.startBall();
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
+                    CurrentGameState = GameState.playing;
                 }
                 break;
-            case GameState.LostALife:
-                if (InputTaken())
-                {
-                    ball.Startball();
-                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
-                    CurrentGameState = GameState.Playing;
-                }
-                break;
-            case GameState.LostAllLives:
-                if (InputTaken())
+            case GameState.lostAllLives:
+                if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
                     Restart();
-                    ball.Startball();
-                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
-                    CurrentGameState = GameState.Playing;
+                    ball.startBall();
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
+                    CurrentGameState = GameState.playing;
                 }
                 break;
             default:
@@ -78,49 +84,26 @@ public class gameController : MonoBehaviour
 
     private void Restart()
     {
+        bricksAlive = 0;
         foreach (var item in blocks)
         {
+            bricksAlive++;
             item.SetActive(true);
-            //item.GetComponent<brick>().InitializeColor();
         }
-        Lives = 3;
-        Score = 0;
+        lives = 3;
+        score = 0;
     }
 
 
-    public void DecreaseLives()
+    public void decreaseLives()
     {
-        if (Lives > 0) {
-            Lives--;
+        if (lives > 0) {
+            lives--;
         }
 
-        if(Lives == 0)
-        {
-            statusTextMesh.text = "GAME OVER. Tap to play again";
-            CurrentGameState = GameState.LostAllLives;
+        if(lives == 0) {
+            statusTextMesh.text = "GAME OVER. Tap to restart";
+            CurrentGameState = GameState.lostAllLives;
         }
-        else
-        {
-            statusTextMesh.text = "Lost a life. Tap to continue";
-            CurrentGameState = GameState.LostALife;
-        }
-        ball.Stopball();
-    }
-
-    public static int Lives = 3;
-    public static int Score = 0;
-    public static int BlocksAlive = 20;
-    public static GameState CurrentGameState = GameState.Start;
-
-    public static ball ball;
-    private GameObject[] blocks;
-
-    public enum GameState
-    {
-        Start,
-        Playing,
-        Won,
-        LostALife,
-        LostAllLives
     }
 }

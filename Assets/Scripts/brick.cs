@@ -16,8 +16,8 @@ public class brick : MonoBehaviour {
 
     void OnCollisionExit2D(Collision2D col)
     {
-        gameController.Score += 20;
-        gameController.BlocksAlive--;
+        gameController.score += 1;
+        gameController.bricksAlive--;
         gameObject.SetActive(false);
     }
 }

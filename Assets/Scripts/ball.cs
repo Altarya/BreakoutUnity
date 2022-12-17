@@ -17,7 +17,7 @@ public class ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameController.CurrentGameState == gameController.GameState.Playing)
+        if (gameController.CurrentGameState == gameController.GameState.playing)
             GiveBoostIfMovingOnXorYAxis();
     }
 
@@ -38,13 +38,13 @@ public class ball : MonoBehaviour
         }
     }
 
-    public void Startball()
+    public void startBall()
     {
         transform.position = InitialLocation;
         GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-3.0f, 3.0f), SpeedY);
     }
 
-    public void Stopball()
+    public void stopBall()
     {
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
