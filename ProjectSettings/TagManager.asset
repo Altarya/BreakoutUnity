@@ -8,8 +8,9 @@ TagManager:
   - Dangerous
   - Smelly
   - Fire
-  - Ball
-  - Block
+  - brick
+  - ball
+  - wall
   layers:
   - Default
   - TransparentFX
