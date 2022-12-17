@@ -40,5 +40,8 @@ public class ball : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 
+    void OnCollisionExit2D(Collision2D col) {
+        FMODUnity.RuntimeManager.CreateInstance("event:/boop").start();
+    }
 
 }

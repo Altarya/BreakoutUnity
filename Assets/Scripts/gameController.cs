@@ -62,6 +62,7 @@ public class gameController : MonoBehaviour
                 statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
                 if(bricksAlive == 0) {
                     CurrentGameState = GameState.victory;
+                    FMODUnity.RuntimeManager.CreateInstance("event:/win").start();
                 }
                 break;
             case GameState.victory:
@@ -142,6 +143,7 @@ public class gameController : MonoBehaviour
         if(lives == 0) {
             statusTextMesh.text = "GAME OVER. Tap to restart";
             CurrentGameState = GameState.lostAllLives;
+            FMODUnity.RuntimeManager.CreateInstance("event:/lose").start();
         }
     }
 }

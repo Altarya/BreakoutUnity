@@ -12,5 +12,6 @@ public class brick : MonoBehaviour {
         gameController.score += 1;
         gameController.bricksAlive--;
         gameObject.SetActive(false);
+        FMODUnity.RuntimeManager.CreateInstance("event:/point").start();
     }
 }

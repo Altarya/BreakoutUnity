@@ -426,8 +426,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../ProvaMooobile/My project/FMOD/project/project.fspro
-  sourceBankPath: ../ProvaMooobile/My project/FMOD/project/Build
+  sourceProjectPath: FMOD/project/project.fspro
+  sourceBankPath: FMOD/project/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
