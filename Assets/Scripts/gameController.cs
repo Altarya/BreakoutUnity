@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using TMPro;
+
+[System.Serializable]
+public class SaveData
+{
+    public int highScore;
+}
 
 public class gameController : MonoBehaviour
 {
@@ -13,10 +17,11 @@ public class gameController : MonoBehaviour
     TMP_Text statusTextMesh;
     public static int lives = 3;
     public static int score = 0;
+    public static SaveData save;
     public static int bricksAlive = 20;
     public static GameState CurrentGameState = GameState.start;
     public static ball ball;
-    private GameObject[] blocks;
+    private GameObject[] bricks;
     public enum GameState
     {
         start,
@@ -27,10 +32,12 @@ public class gameController : MonoBehaviour
 
     //Init
     void Start() {
-        blocks = GameObject.FindGameObjectsWithTag("brick");
+        bricks = GameObject.FindGameObjectsWithTag("brick");
         ball = ballObj.GetComponent<ball>();
         GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
         statusTextMesh = statusText.GetComponent<TMP_Text>();
+
+        save = new SaveData();
 
         for (int i = 0; i < walls.Length; i++)
         {
@@ -70,9 +77,26 @@ public class gameController : MonoBehaviour
                 }
                 break;
             case GameState.lostAllLives:
+                ball.stopBall();
                 if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
                     Restart();
+                    LoadData();
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    string path = Application.persistentDataPath + "/breakout.save";
+
+                    FileStream stream = new FileStream(path, FileMode.Create);
+
+                    if (save.highScore < score)
+                    {
+                        save.highScore = score;
+                    }
+                    Debug.Log("High Score: " + save.highScore);
+
+                    formatter.Serialize(stream, save);
+                    stream.Close();
+                    score = 0;
+                    ball.speedY = 3;
                     ball.startBall();
                     statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
                     CurrentGameState = GameState.playing;
@@ -83,18 +107,31 @@ public class gameController : MonoBehaviour
         }
     }
 
-    private void Restart()
-    {
+    private void Restart() {
         bricksAlive = 0;
-        foreach (var item in blocks)
+        foreach (var item in bricks)
         {
             bricksAlive++;
             item.SetActive(true);
         }
         lives = 3;
-        score = 0;
     }
 
+    public static void LoadData() {
+        string path = Application.persistentDataPath + "/breakout.save";
+
+        if(File.Exists(path)) {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            save = formatter.Deserialize(stream) as SaveData;
+
+            stream.Close();
+
+        } else {
+            Debug.LogError("Error: Save file not found in " + path);
+        }
+    }
 
     public void decreaseLives()
     {
