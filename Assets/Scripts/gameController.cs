@@ -3,18 +3,21 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class gameController : MonoBehaviour
 {
 
-    Text statusText;
+    public GameObject statusText;
+
+    TMP_Text statusTextMesh;
 
     //Init
     void Start() {
         blocks = GameObject.FindGameObjectsWithTag("brick");
         ball = GameObject.Find("ball").GetComponent<ball>();
-        statusText = GameObject.Find("statusIndicator").GetComponent<Text>();
         GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
+        statusTextMesh = statusText.GetComponent<TMP_Text>();
 
         for (int i = 0; i < walls.Length; i++)
         {
@@ -35,7 +38,7 @@ public class gameController : MonoBehaviour
             case GameState.Start:
                 if (InputTaken())
                 {
-                    statusText.text = string.Format("Lives: {0}  Score: {1}", Lives, Score);
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
                     CurrentGameState = GameState.Playing;
                     ball.Startball();
                 }
@@ -47,7 +50,7 @@ public class gameController : MonoBehaviour
                 {
                     Restart();
                     ball.Startball();
-                    statusText.text = string.Format("Lives: {0}  Score: {1}", Lives, Score);
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
                     CurrentGameState = GameState.Playing;
                 }
                 break;
@@ -55,7 +58,7 @@ public class gameController : MonoBehaviour
                 if (InputTaken())
                 {
                     ball.Startball();
-                    statusText.text = string.Format("Lives: {0}  Score: {1}", Lives, Score);
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
                     CurrentGameState = GameState.Playing;
                 }
                 break;
@@ -64,7 +67,7 @@ public class gameController : MonoBehaviour
                 {
                     Restart();
                     ball.Startball();
-                    statusText.text = string.Format("Lives: {0}  Score: {1}", Lives, Score);
+                    statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", Score, Lives);
                     CurrentGameState = GameState.Playing;
                 }
                 break;
@@ -93,12 +96,12 @@ public class gameController : MonoBehaviour
 
         if(Lives == 0)
         {
-            statusText.text = "Lost all lives. Tap to play again";
+            statusTextMesh.text = "GAME OVER. Tap to play again";
             CurrentGameState = GameState.LostAllLives;
         }
         else
         {
-            statusText.text = "Lost a life. Tap to continue";
+            statusTextMesh.text = "Lost a life. Tap to continue";
             CurrentGameState = GameState.LostALife;
         }
         ball.Stopball();
