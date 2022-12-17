@@ -63,11 +63,12 @@ public class gameController : MonoBehaviour
                 if(bricksAlive == 0) {
                     CurrentGameState = GameState.victory;
                     FMODUnity.RuntimeManager.CreateInstance("event:/win").start();
+                    LoadData();
                 }
                 break;
             case GameState.victory:
                 ball.stopBall();
-                statusTextMesh.text = string.Format("LEVEL CLEARED. Tap to advance");
+                statusTextMesh.text = string.Format("LEVEL CLEARED. Tap to advance. High Score: {0}", save.highScore);
                 if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
                     Restart();
