@@ -63,6 +63,7 @@ public class gameController : MonoBehaviour
                 if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
                 {
                     Restart();
+                    ball.speedY += 2;
                     ball.startBall();
                     statusTextMesh.text = string.Format("SCORE: {0}  LIVES: {1}", score, lives);
                     CurrentGameState = GameState.playing;

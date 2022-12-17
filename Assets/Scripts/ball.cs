@@ -4,7 +4,7 @@ using System.Collections;
 public class ball : MonoBehaviour
 {
 
-    public float SpeedY = 7;
+    public float speedY = 3;
     private Vector2 InitialLocation;
 
     // Use this for initialization
@@ -41,7 +41,7 @@ public class ball : MonoBehaviour
     public void startBall()
     {
         transform.position = InitialLocation;
-        GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-3.0f, 3.0f), SpeedY);
+        GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-3.0f, 3.0f), speedY);
     }
 
     public void stopBall()
