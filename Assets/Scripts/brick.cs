@@ -4,18 +4,11 @@ using System.Collections;
 public class brick : MonoBehaviour {
 
 	// Use this for initialization
-	void Start ()
-    {
+	void Start () {
         GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 0.1f);
     }
 
-    // Update is called once per frame
-    void Update () {
-	
-	}
-
-    void OnCollisionExit2D(Collision2D col)
-    {
+    void OnCollisionExit2D(Collision2D col) {
         gameController.score += 1;
         gameController.bricksAlive--;
         gameObject.SetActive(false);

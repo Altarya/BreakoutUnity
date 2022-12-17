@@ -29,10 +29,4 @@ public class highScore : MonoBehaviour
 
         HSObj.GetComponent<TMP_Text>().text = new string("High Score: "+highScore.highScore);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

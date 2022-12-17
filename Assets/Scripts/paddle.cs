@@ -8,8 +8,7 @@ public class paddle : MonoBehaviour
     public gameController camera;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         EnhancedTouchSupport.Enable();
         if(EnhancedTouchSupport.enabled) {
             Debug.Log("Touch Enabled");
@@ -21,10 +20,8 @@ public class paddle : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         float input = 0.0f;
-
         if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeFingers.Count  > 0) {
             transform.position = new Vector3(Camera.main.ScreenToWorldPoint(new Vector2(UnityEngine.InputSystem.EnhancedTouch.Touch.fingers[0].screenPosition.x, Screen.height)).x, transform.position.y, transform.position.z);
         } else {
@@ -36,8 +33,6 @@ public class paddle : MonoBehaviour
 
         
     }
-
     public Transform LeftBlockTransform, RightBLockTransform;
     public float speed = 50;
-     
 }
